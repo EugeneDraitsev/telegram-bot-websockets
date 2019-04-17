@@ -8,7 +8,7 @@ export const connect = async (event: any) => {
     Item: { connectionId },
   })
 
-  console.log(`Connection ${connectionId} saved to dynamo`)
+  console.log(`Connection ${connectionId} saved to dynamo`) // eslint-disable-line no-console
 
   return { statusCode: 200 }
 }
@@ -21,7 +21,7 @@ export const disconnect = async (event: any) => {
     Key: { connectionId },
   })
 
-  console.log(`Connection ${connectionId} deleted from dynamo`)
+  console.log(`Connection ${connectionId} deleted from dynamo`) // eslint-disable-line no-console
 
   return { statusCode: 200 }
 }

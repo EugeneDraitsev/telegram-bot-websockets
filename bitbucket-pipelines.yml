@@ -9,5 +9,4 @@ pipelines:
           script:
             - yarn
             - yarn lint:fix
-            - yarn test
             - yarn deploy

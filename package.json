@@ -63,5 +63,8 @@
       "json",
       "node"
     ]
+  },
+  "dependencies": {
+    "aws-sdk": "^2.439.0"
   }
 }
