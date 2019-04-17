@@ -15,6 +15,7 @@
     "test": "cross-env IS_LOCAL=true jest --verbose",
     "logs:connect": "sls logs -t -f connect",
     "logs:disconnect": "sls logs -t -f disconnect",
+    "logs:default": "sls logs -t -f default",
     "deploy": "sls deploy"
   },
   "dependencies": {

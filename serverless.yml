@@ -15,6 +15,11 @@ provider:
     ${file(roleStatements.yml)}
 
 functions:
+  default:
+    handler: src/handler.default
+    events:
+      - websocket:
+          route: $default
   connect:
     handler: src/handler.connect
     events:
