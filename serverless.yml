@@ -1,0 +1,41 @@
+service: telegram-websockets
+
+provider:
+  name: aws
+  stage: prod
+  region: eu-central-1
+  memorySize: 512
+  timeout: 30
+  runtime: nodejs8.10
+  tracing: true
+  environment:
+    IS_LOCAL: ${env:IS_LOCAL}
+    region: eu-central-1
+  iamRoleStatements:
+    ${file(roleStatements.yml)}
+
+functions:
+  connect:
+    handler: src/handler.connect
+    events:
+      - websocket:
+          route: $connect
+  disconnect:
+    handler: src/handler.disconnect
+    events:
+      - websocket:
+          route: $disconnect
+
+custom:
+  serverless-offline:
+    port: 4000
+  custom:
+    webpack:
+      packager: 'yarn'
+
+plugins:
+  - serverless-webpack
+  - serverless-offline
+
+resources:
+  ${file(resources.yml)}

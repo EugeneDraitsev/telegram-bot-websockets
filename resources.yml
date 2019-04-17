@@ -1,0 +1,12 @@
+Resources:
+  ChatWebsocketConnections:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: chat-websocket-connections
+      AttributeDefinitions:
+        - AttributeName: connectionId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: connectionId
+          KeyType: HASH
+      BillingMode: PAY_PER_REQUEST
