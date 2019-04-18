@@ -1,4 +1,4 @@
-import { map, isEmpty } from 'lodash'
+import { map, isEmpty, get } from 'lodash'
 
 import { saveConnection, removeConnection, getConnections, get24hChatStats } from './data'
 import { sendEvent } from './utils'
@@ -30,7 +30,8 @@ export const stats = async (event: any) => {
 }
 
 export const broadcastStats = async (event: any) => {
-  const { chatId, endpoint } = event.queryStringParameters || { chatId: null, endpoint: null }
+  const chatId = get(event.queryStringParameters, 'chatId') || event.chatId
+  const endpoint = get(event.queryStringParameters, 'endpoint') || event.endpoint
 
   if (chatId && endpoint) {
     const connections = await getConnections(chatId)
@@ -41,7 +42,8 @@ export const broadcastStats = async (event: any) => {
       await Promise.all(map(connections, connection =>
         sendEvent(connection.connectionId, endpoint, data)))
 
-      return { statusCode: 200, body: JSON.stringify(data) }
+      return { statusCode: 200 }
+      // return { statusCode: 200, body: JSON.stringify(data) }
     }
   }
 
