@@ -15,11 +15,14 @@
     "test": "cross-env IS_LOCAL=true jest --verbose",
     "logs:connect": "sls logs -t -f connect",
     "logs:disconnect": "sls logs -t -f disconnect",
-    "logs:default": "sls logs -t -f default",
+    "logs:stats": "sls logs -t -f stats",
+    "logs:broadcastStats": "sls logs -t -f broadcastStats",
     "deploy": "sls deploy"
   },
   "dependencies": {
-    "aws-sdk": "^2.439.0"
+    "aws-sdk": "^2.439.0",
+    "lodash": "^4.17.11",
+    "luxon": "^1.12.1"
   },
   "devDependencies": {
     "@babel/core": "7.4.3",
@@ -27,6 +30,7 @@
     "@babel/preset-typescript": "^7.3.3",
     "@types/jest": "^24.0.11",
     "@types/lodash": "^4.14.123",
+    "@types/luxon": "^1.12.0",
     "@types/node": "^11.13.5",
     "@typescript-eslint/eslint-plugin": "^1.6.0",
     "@typescript-eslint/parser": "^1.6.0",

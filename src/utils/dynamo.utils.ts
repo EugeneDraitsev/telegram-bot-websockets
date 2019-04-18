@@ -32,6 +32,9 @@ export const dynamoScan = (params: DynamoDB.DocumentClient.ScanInput) => new Pro
   documentClient.scan(scanParams, onScan)
 })
 
+export const dynamoQuery = (params: DynamoDB.DocumentClient.QueryInput) =>
+  documentClient.query(params).promise()
+
 export const dynamoPutItem = (params: DynamoDB.DocumentClient.PutItemInput) => documentClient.put(params).promise()
 
 export const dynamoDeleteItem = (params: DynamoDB.DocumentClient.DeleteItemInput) =>
