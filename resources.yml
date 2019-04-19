@@ -10,3 +10,28 @@ Resources:
         - AttributeName: connectionId
           KeyType: HASH
       BillingMode: PAY_PER_REQUEST
+  S3ProfileImages:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: ${self:custom.imagesBucketName}
+      CorsConfiguration:
+        CorsRules:
+          - AllowedMethods:
+              - GET
+              - HEAD
+            AllowedOrigins:
+              - "*"
+      AccessControl: PublicRead
+  ProfileImageBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket:
+        Ref: S3ProfileImages
+      PolicyDocument:
+        Statement:
+          - Sid: PublicReadGetObject
+            Effect: Allow
+            Principal: "*"
+            Action:
+              - s3:GetObject
+            Resource: arn:aws:s3:::${self:custom.imagesBucketName}/*

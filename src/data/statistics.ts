@@ -1,24 +1,10 @@
-/* eslint-disable camelcase */
 import { chain, groupBy } from 'lodash'
 
 import { dynamoQuery } from '../utils'
+import { ChatEvent } from '../types'
 
 const DAY = 1000 * 60 * 60 * 24
 
-interface UserInfo {
-  id: number
-  is_bot: number
-  last_name?: string
-  first_name?: string
-  username?: string
-  language_code?: string
-}
-
-interface ChatEvent {
-  chatId: number,
-  date: number,
-  userInfo: UserInfo
-}
 
 export const get24hChatStats = async (chatId: string) => {
   const { Items } = await dynamoQuery({

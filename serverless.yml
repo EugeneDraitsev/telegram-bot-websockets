@@ -10,6 +10,8 @@ provider:
   tracing: true
   environment:
     IS_LOCAL: ${env:IS_LOCAL}
+    IMAGES_BUCKET_NAME: ${self:custom.imagesBucketName}
+    BOT_TOKEN: ${env:BOT_TOKEN, file(./config.json):BOT_TOKEN}
     region: ${self:provider.region}
   iamRoleStatements:
     ${file(roleStatements.yml)}
@@ -38,6 +40,7 @@ functions:
           method: get
 
 custom:
+  imagesBucketName: chat-profile-images
   serverless-offline:
     port: 4000
   webpack:

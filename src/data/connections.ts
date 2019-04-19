@@ -1,10 +1,5 @@
 import { dynamoDeleteItem, dynamoPutItem, dynamoScan } from '../utils'
-
-export interface Connection {
-  connectionId: string
-  date?: number
-  chatId?: string
-}
+import { Connection } from '../types'
 
 export const saveConnection = (Item: Connection) => dynamoPutItem({
   TableName: 'chat-websocket-connections',

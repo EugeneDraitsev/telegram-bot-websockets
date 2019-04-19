@@ -1,6 +1,6 @@
 import { map, isEmpty, get } from 'lodash'
 
-import { saveConnection, removeConnection, getConnections, get24hChatStats } from './data'
+import { saveConnection, removeConnection, getConnections, get24hChatStats, getChat } from './data'
 import { sendEvent } from './utils'
 
 export const connect = async (event: any) => {
@@ -19,12 +19,13 @@ export const stats = async (event: any) => {
   const { connectionId, domainName, stage } = event.requestContext
   const { chatId } = JSON.parse(event.body)
 
-  const [data] = await Promise.all([
+  const [usersData, chatInfo] = await Promise.all([
     get24hChatStats(chatId),
+    getChat(chatId),
     saveConnection({ connectionId, chatId: String(Number(chatId)) }),
   ])
 
-  await sendEvent(connectionId, `${domainName}/${stage}`, data)
+  await sendEvent(connectionId, `${domainName}/${stage}`, { usersData, chatInfo })
 
   return { statusCode: 200 }
 }
@@ -37,10 +38,10 @@ export const broadcastStats = async (event: any) => {
     const connections = await getConnections(chatId)
 
     if (!isEmpty(connections)) {
-      const data = await get24hChatStats(chatId)
+      const usersData = await get24hChatStats(chatId)
 
       await Promise.all(map(connections, connection =>
-        sendEvent(connection.connectionId, endpoint, data)))
+        sendEvent(connection.connectionId, endpoint, { usersData })))
 
       return { statusCode: 200 }
       // return { statusCode: 200, body: JSON.stringify(data) }

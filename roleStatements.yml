@@ -21,3 +21,8 @@
   Resource:
     - arn:aws:dynamodb:*:*:table/chat-statistics
     - arn:aws:dynamodb:*:*:table/chat-events
+- Effect: Allow
+  Action:
+    - s3:*
+  Resource:
+    - arn:aws:s3:::${self:custom.imagesBucketName}/*
