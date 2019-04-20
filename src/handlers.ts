@@ -2,6 +2,7 @@ import { map, isEmpty, get } from 'lodash'
 
 import { saveConnection, removeConnection, getConnections, get24hChatStats, getChat } from './data'
 import { sendEvent } from './utils'
+import './dynamo-optimization'
 
 export const connect = async (event: any) => {
   const { connectionId } = event.requestContext
