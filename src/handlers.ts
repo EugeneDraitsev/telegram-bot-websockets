@@ -41,7 +41,7 @@ export const broadcastStats = async (event: any) => {
     if (!isEmpty(connections)) {
       const usersData = await get24hChatStats(chatId)
 
-      await Promise.all(map(connections, connection =>
+      await Promise.all(map(connections, (connection) =>
         sendEvent(connection.connectionId, endpoint, { usersData })))
 
       return { statusCode: 200 }

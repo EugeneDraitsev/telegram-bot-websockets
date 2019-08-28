@@ -16,7 +16,7 @@ const FILE_URL = `https://api.telegram.org/file/bot${process.env.BOT_TOKEN}`
 
 export const botRequest = async (method: string, body: FormData) => {
   const url = `${BASE_URL}/${method}`
-  const response: Response = await fetch(url, { body, method: 'POST' }).then(r => r.json())
+  const response: Response = await fetch(url, { body, method: 'POST' }).then((r) => r.json())
   if (response.ok) {
     return response.result
   }
@@ -33,7 +33,7 @@ export const getFileUrl = async (filePath: string) => {
     }
 
     const fileUrl = `${FILE_URL}/${filePath}`
-    const file = await fetch(fileUrl).then(r => r.buffer())
+    const file = await fetch(fileUrl).then((r) => r.buffer())
     await saveFile(BUCKET_NAME, fileName!, file)
 
     return s3Url

@@ -19,12 +19,12 @@ export const get24hChatStats = async (chatId: string) => {
 
   const data = Items as ChatEvent []
 
-  const groupedMessages = groupBy(data, x => x.userInfo.id)
+  const groupedMessages = groupBy(data, (x) => x.userInfo.id)
 
   const users = chain(data)
-    .map(x => x.userInfo)
+    .map((x) => x.userInfo)
     .uniqBy('id')
-    .map(x => ({ ...x, messages: groupedMessages[x.id].length }))
+    .map((x) => ({ ...x, messages: groupedMessages[x.id].length }))
     .orderBy('messages', 'desc')
     .value()
 
