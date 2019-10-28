@@ -1,13 +1,6 @@
 import { DynamoDB } from 'aws-sdk'
 import { DocumentClient } from 'aws-sdk/lib/dynamodb/document_client'
 
-import ScanInput = DocumentClient.ScanInput
-import QueryOutput = DocumentClient.QueryOutput
-import QueryInput = DocumentClient.QueryInput
-import PutItemInput = DocumentClient.PutItemInput
-import DeleteItemInput = DocumentClient.DeleteItemInput
-import PutItemOutput = DocumentClient.PutItemOutput
-import DeleteItemOutput = DocumentClient.DeleteItemOutput
 
 const documentClient = new DynamoDB.DocumentClient({
   apiVersion: '2012-08-10',
@@ -17,7 +10,7 @@ const documentClient = new DynamoDB.DocumentClient({
 
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const dynamoScan = async (inputParams: ScanInput): Promise<any[]> => {
+export const dynamoScan = async (inputParams: DocumentClient.ScanInput): Promise<any[]> => {
   const results = []
   const params = { ...inputParams }
 
@@ -36,10 +29,11 @@ export const dynamoScan = async (inputParams: ScanInput): Promise<any[]> => {
   }
 }
 
-export const dynamoQuery = (params: QueryInput): Promise<QueryOutput> =>
+export const dynamoQuery = (params: DocumentClient.QueryInput): Promise<DocumentClient.QueryOutput> =>
   documentClient.query(params).promise()
 
-export const dynamoPutItem = (params: PutItemInput): Promise<PutItemOutput> => documentClient.put(params).promise()
+export const dynamoPutItem = (params: DocumentClient.PutItemInput): Promise<DocumentClient.PutItemOutput> =>
+  documentClient.put(params).promise()
 
-export const dynamoDeleteItem = (params: DeleteItemInput): Promise<DeleteItemOutput> =>
+export const dynamoDeleteItem = (params: DocumentClient.DeleteItemInput): Promise<DocumentClient.DeleteItemOutput> =>
   documentClient.delete(params).promise()
