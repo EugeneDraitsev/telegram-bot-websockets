@@ -1,4 +1,13 @@
-import { DynamoDB, AWSError } from 'aws-sdk'
+import { DynamoDB } from 'aws-sdk'
+import { DocumentClient } from 'aws-sdk/lib/dynamodb/document_client'
+
+import ScanInput = DocumentClient.ScanInput
+import QueryOutput = DocumentClient.QueryOutput
+import QueryInput = DocumentClient.QueryInput
+import PutItemInput = DocumentClient.PutItemInput
+import DeleteItemInput = DocumentClient.DeleteItemInput
+import PutItemOutput = DocumentClient.PutItemOutput
+import DeleteItemOutput = DocumentClient.DeleteItemOutput
 
 const documentClient = new DynamoDB.DocumentClient({
   apiVersion: '2012-08-10',
@@ -6,36 +15,31 @@ const documentClient = new DynamoDB.DocumentClient({
   service: new DynamoDB({ apiVersion: '2012-08-10', region: process.env.region || 'eu-central-1' }),
 })
 
-export const dynamoScan = (params: DynamoDB.DocumentClient.ScanInput) => new Promise((resolve, reject) => {
-  const scanParams = { ...params }
 
-  const results: any[] = []
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const dynamoScan = async (inputParams: ScanInput): Promise<any[]> => {
+  const results = []
+  const params = { ...inputParams }
 
-  const onScan = (err: AWSError, data: DynamoDB.ScanOutput) => {
-    if (err) {
-      // eslint-disable-next-line no-console
-      console.log('Unable to query. Error:', JSON.stringify(err, null, 2))
-      reject(err)
-    } else {
-      results.push(...data.Items!)
-      // continue scanning if we have more records, because
-      // scan can retrieve a maximum of 1MB of data
-      if (typeof data.LastEvaluatedKey !== 'undefined') {
-        scanParams.ExclusiveStartKey = data.LastEvaluatedKey
-        documentClient.scan(scanParams, onScan)
-      } else {
-        resolve(results)
-      }
+  // eslint-disable-next-line no-constant-condition
+  while (true) {
+    // eslint-disable-next-line no-await-in-loop
+    const scanResults = await documentClient.scan(params).promise()
+
+    results.push(...scanResults.Items || [])
+
+    if (typeof scanResults.LastEvaluatedKey === 'undefined') {
+      return results
     }
+
+    params.ExclusiveStartKey = scanResults.LastEvaluatedKey
   }
+}
 
-  documentClient.scan(scanParams, onScan)
-})
-
-export const dynamoQuery = (params: DynamoDB.DocumentClient.QueryInput) =>
+export const dynamoQuery = (params: QueryInput): Promise<QueryOutput> =>
   documentClient.query(params).promise()
 
-export const dynamoPutItem = (params: DynamoDB.DocumentClient.PutItemInput) => documentClient.put(params).promise()
+export const dynamoPutItem = (params: PutItemInput): Promise<PutItemOutput> => documentClient.put(params).promise()
 
-export const dynamoDeleteItem = (params: DynamoDB.DocumentClient.DeleteItemInput) =>
+export const dynamoDeleteItem = (params: DeleteItemInput): Promise<DeleteItemOutput> =>
   documentClient.delete(params).promise()

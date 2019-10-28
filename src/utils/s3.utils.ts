@@ -2,7 +2,7 @@ import { S3 } from 'aws-sdk'
 
 const s3 = new S3({ region: process.env.region || 'eu-central-1', apiVersion: '2006-03-01' })
 
-export const isFileExist = async (Bucket: S3.Bucket, Key: string) => {
+export const isFileExist = async (Bucket: S3.Bucket, Key: string): Promise<boolean> => {
   try {
     const params = {
       Bucket,
@@ -16,5 +16,5 @@ export const isFileExist = async (Bucket: S3.Bucket, Key: string) => {
   }
 }
 
-export const saveFile = async (Bucket: S3.Bucket, Key: string, Body: Buffer) =>
+export const saveFile = async (Bucket: S3.Bucket, Key: string, Body: Buffer): Promise<S3.Types.PutObjectOutput> =>
   s3.putObject({ Bucket, Key, Body } as S3.PutObjectRequest).promise()

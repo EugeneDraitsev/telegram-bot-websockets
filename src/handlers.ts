@@ -1,22 +1,23 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { map, isEmpty, get } from 'lodash'
 
 import { saveConnection, removeConnection, getConnections, get24hChatStats, getChat } from './data'
 import { sendEvent } from './utils'
 import './dynamo-optimization'
 
-export const connect = async (event: any) => {
+export const connect = async (event: any): Promise<any> => {
   const { connectionId } = event.requestContext
   await saveConnection({ connectionId, date: Date.now() })
   return { statusCode: 200 }
 }
 
-export const disconnect = async (event: any) => {
+export const disconnect = async (event: any): Promise<any> => {
   const { connectionId } = event.requestContext
   await removeConnection(connectionId)
   return { statusCode: 200 }
 }
 
-export const stats = async (event: any) => {
+export const stats = async (event: any): Promise<any> => {
   const { connectionId, domainName, stage } = event.requestContext
   const { chatId } = JSON.parse(event.body)
 
@@ -31,7 +32,7 @@ export const stats = async (event: any) => {
   return { statusCode: 200 }
 }
 
-export const broadcastStats = async (event: any) => {
+export const broadcastStats = async (event: any): Promise<any> => {
   const chatId = get(event.queryStringParameters, 'chatId') || event.chatId
   const endpoint = get(event.queryStringParameters, 'endpoint') || event.endpoint
 
