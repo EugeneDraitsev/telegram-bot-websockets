@@ -52,3 +52,13 @@ export const broadcastStats = async (event: any): Promise<any> => {
 
   return { statusCode: 200 }
 }
+
+export const getChatStats = async (event: any): Promise<any> => {
+  const chatId = get(event.queryStringParameters, 'chatId') || event.chatId
+  try {
+    const usersData = await get24hChatStats(chatId)
+    return { statusCode: 200, body: JSON.stringify(usersData) }
+  } catch (e) {
+    return { statusCode: 200 }
+  }
+}

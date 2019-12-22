@@ -39,6 +39,12 @@ functions:
       - http:
           path: /
           method: get
+  getChatStats:
+    handler: src/handlers.getChatStats
+    events:
+      - http:
+          path: /getChatStats
+          method: get
 
 custom:
   imagesBucketName: chat-profile-images
