@@ -49,7 +49,7 @@ functions:
 
 custom:
   imagesBucketName: chat-profile-images
-  chatDataBucketName: chat-data
+  chatDataBucketName: chat-profile-data
   serverless-offline:
     port: 4000
   webpack:
