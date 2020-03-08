@@ -1,9 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { map, isEmpty, get } from 'lodash'
+import { Bucket } from 'aws-sdk/clients/s3'
 
 import { saveConnection, removeConnection, getConnections, get24hChatStats, getChat } from './data'
-import { sendEvent } from './utils'
+import { saveFile, sendEvent } from './utils'
 import './dynamo-optimization'
+
+const CHAT_DATA_BUCKET_NAME = process.env.CHAT_DATA_BUCKET_NAME as Bucket
 
 export const connect = async (event: any): Promise<any> => {
   const { connectionId } = event.requestContext
@@ -53,14 +56,13 @@ export const broadcastStats = async (event: any): Promise<any> => {
   return { statusCode: 200 }
 }
 
-export const getChatStats = async (event: any): Promise<any> => {
+export const updateChatData = async (event: any): Promise<any> => {
   const chatId = get(event.queryStringParameters, 'chatId') || event.chatId
+
   try {
-    const [usersData, chatInfo] = await Promise.all([
-      get24hChatStats(chatId),
-      getChat(chatId),
-    ])
-    return { statusCode: 200, body: JSON.stringify({ usersData, chatInfo }) }
+    const chatInfo = await getChat(chatId)
+    await saveFile(CHAT_DATA_BUCKET_NAME, chatId, Buffer.from(JSON.stringify(chatInfo)))
+    return { statusCode: 200 }
   } catch (e) {
     return { statusCode: 200 }
   }

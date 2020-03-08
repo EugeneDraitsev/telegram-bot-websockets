@@ -12,6 +12,7 @@ provider:
   environment:
     IS_LOCAL: ${env:IS_LOCAL}
     IMAGES_BUCKET_NAME: ${self:custom.imagesBucketName}
+    CHAT_DATA_BUCKET_NAME: ${self:custom.chatDataBucketName}
     BOT_TOKEN: ${env:BOT_TOKEN, file(./config.json):BOT_TOKEN}
     region: ${self:provider.region}
   iamRoleStatements:
@@ -39,15 +40,16 @@ functions:
       - http:
           path: /
           method: get
-  getChatStats:
-    handler: src/handlers.getChatStats
+  updateChatData:
+    handler: src/handlers.updateChatData
     events:
       - http:
-          path: /getChatStats
+          path: /updateChatData
           method: get
 
 custom:
   imagesBucketName: chat-profile-images
+  chatDataBucketName: chat-data
   serverless-offline:
     port: 4000
   webpack:

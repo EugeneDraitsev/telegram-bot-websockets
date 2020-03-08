@@ -1,7 +1,7 @@
 import * as FormData from 'form-data'
+
 import { botRequest, getFileUrl } from '../utils'
 import { Chat, File } from '../types'
-
 
 export const getFile = async (fileId: string): Promise<string> => {
   const body = new FormData()

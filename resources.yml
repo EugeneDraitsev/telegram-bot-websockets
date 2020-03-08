@@ -35,3 +35,28 @@ Resources:
             Action:
               - s3:GetObject
             Resource: arn:aws:s3:::${self:custom.imagesBucketName}/*
+  S3ChatData:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: ${self:custom.chatDataBucketName}
+      CorsConfiguration:
+        CorsRules:
+          - AllowedMethods:
+              - GET
+              - HEAD
+            AllowedOrigins:
+              - "*"
+      AccessControl: PublicRead
+  ChatDataBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket:
+        Ref: S3ProfileImages
+      PolicyDocument:
+        Statement:
+          - Sid: PublicReadGetObject
+            Effect: Allow
+            Principal: "*"
+            Action:
+              - s3:GetObject
+            Resource: arn:aws:s3:::${self:custom.chatDataBucketName}/*
