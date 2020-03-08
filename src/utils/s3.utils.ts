@@ -18,3 +18,6 @@ export const isFileExist = async (Bucket: S3.Bucket, Key: string): Promise<boole
 
 export const saveFile = async (Bucket: S3.Bucket, Key: string, Body: Buffer): Promise<S3.Types.PutObjectOutput> =>
   s3.putObject({ Bucket, Key, Body } as S3.PutObjectRequest).promise()
+
+export const getFile = async (Bucket: S3.Bucket, Key: string): Promise<S3.Types.GetObjectOutput> =>
+  s3.getObject({ Bucket, Key } as S3.GetObjectRequest).promise()
