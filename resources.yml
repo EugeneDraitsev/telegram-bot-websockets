@@ -48,10 +48,10 @@ Resources:
               - "*"
       AccessControl: PublicRead
   ChatDataBucketPolicy:
-    Type: AWS::S3::S3ChatData
+    Type: AWS::S3::BucketPolicy
     Properties:
       Bucket:
-        Ref: S3ProfileImages
+        Ref: S3ChatData
       PolicyDocument:
         Statement:
           - Sid: PublicReadGetObject
