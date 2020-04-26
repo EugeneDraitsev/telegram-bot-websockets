@@ -8,6 +8,12 @@ import './dynamo-optimization'
 
 const CHAT_DATA_BUCKET_NAME = process.env.CHAT_DATA_BUCKET_NAME as Bucket
 
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Credentials': true,
+  'Access-Control-Allow-Headers': 'X-Requested-With',
+}
+
 export const connect = async (event: any): Promise<any> => {
   const { connectionId } = event.requestContext
   await saveConnection({ connectionId, date: Date.now() })
@@ -94,7 +100,8 @@ export const getChatByName = async (event: any): Promise<any> => {
     })
 
     const escapedChats = chats.map((chat) => chat.chatInfo)
-    return { statusCode: 200, body: JSON.stringify(escapedChats) }
+
+    return { statusCode: 200, headers: corsHeaders, body: JSON.stringify(escapedChats) }
   } catch (e) {
     return { statusCode: 502 }
   }
