@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { map, isEmpty, get, isEqual } from 'lodash'
+import { map, isEmpty, get, isEqual, toLower } from 'lodash'
 import { Bucket } from 'aws-sdk/clients/s3'
 
 import { saveConnection, removeConnection, getConnections, get24hChatStats, getChat } from './data'
-import { getFile, saveFile, sendEvent } from './utils'
+import { dynamoScan, getFile, saveFile, sendEvent } from './utils'
 import './dynamo-optimization'
 
 const CHAT_DATA_BUCKET_NAME = process.env.CHAT_DATA_BUCKET_NAME as Bucket
@@ -73,5 +73,29 @@ export const updateChatData = async (event: any): Promise<any> => {
     return { statusCode: 200 }
   } catch (e) {
     return { statusCode: 200 }
+  }
+}
+
+export const getChatByName = async (event: any): Promise<any> => {
+  try {
+    const name = get(event.queryStringParameters, 'name') || event.name
+
+    if (!name || name.length < 3) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ massage: 'you should specify chat name' }),
+      }
+    }
+
+    const chats = await dynamoScan({
+      TableName: 'chat-statistics',
+      FilterExpression: 'contains(chatName, :chatName)',
+      ExpressionAttributeValues: { ':chatName': toLower(name) },
+    })
+
+    const escapedChats = chats.map((chat) => chat.chatInfo)
+    return { statusCode: 200, body: JSON.stringify(escapedChats) }
+  } catch (e) {
+    return { statusCode: 502 }
   }
 }

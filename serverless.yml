@@ -40,11 +40,18 @@ functions:
       - http:
           path: /
           method: get
+
   updateChatData:
     handler: src/handlers.updateChatData
     events:
       - http:
           path: /updateChatData
+          method: get
+  getChatByName:
+    handler: src/handlers.getChatByName
+    events:
+      - http:
+          path: /search
           method: get
 
 custom:
