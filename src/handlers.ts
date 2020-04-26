@@ -5,6 +5,7 @@ import { Bucket } from 'aws-sdk/clients/s3'
 import { saveConnection, removeConnection, getConnections, get24hChatStats, getChat } from './data'
 import { dynamoScan, getFile, saveFile, sendEvent } from './utils'
 import './dynamo-optimization'
+import { updateChatInfo } from './data/chat-info'
 
 const CHAT_DATA_BUCKET_NAME = process.env.CHAT_DATA_BUCKET_NAME as Bucket
 
@@ -74,7 +75,10 @@ export const updateChatData = async (event: any): Promise<any> => {
     const savedData = JSON.parse(savedDataBuffer?.Body?.toString() || '{}')
 
     if (!isEqual(savedData, chatInfo) && chatInfo) {
-      await saveFile(CHAT_DATA_BUCKET_NAME, chatId, Buffer.from(JSON.stringify(chatInfo)))
+      await Promise.all([
+        saveFile(CHAT_DATA_BUCKET_NAME, chatId, Buffer.from(JSON.stringify(chatInfo))),
+        updateChatInfo(chatId, chatInfo),
+      ])
     }
     return { statusCode: 200 }
   } catch (e) {

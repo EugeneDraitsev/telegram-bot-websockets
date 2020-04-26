@@ -34,19 +34,13 @@ functions:
     events:
       - websocket:
           route: stats
+
   broadcastStats:
     handler: src/handlers.broadcastStats
-    events:
-      - http:
-          path: /
-          method: get
 
   updateChatData:
     handler: src/handlers.updateChatData
-    events:
-      - http:
-          path: /updateChatData
-          method: get
+
   getChatByName:
     handler: src/handlers.getChatByName
     events:

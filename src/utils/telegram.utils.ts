@@ -11,6 +11,13 @@ interface Response {
   result: any;
 }
 
+export interface UserInfo {
+  username?: string;
+  first_name?: string;
+  last_name?: string;
+  id: number;
+}
+
 const BUCKET_NAME = process.env.IMAGES_BUCKET_NAME as Bucket
 const BASE_URL = `https://api.telegram.org/bot${process.env.BOT_TOKEN}`
 const FILE_URL = `https://api.telegram.org/file/bot${process.env.BOT_TOKEN}`
@@ -45,3 +52,6 @@ export const getFileUrl = async (filePath: string): Promise<string> => {
     return ''
   }
 }
+
+export const getUserName = (userInfo?: UserInfo): string =>
+  userInfo?.username || userInfo?.first_name || userInfo?.last_name || String(userInfo?.id || '')
