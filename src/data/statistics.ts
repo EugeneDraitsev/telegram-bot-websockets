@@ -33,9 +33,9 @@ export const get24hChatStats = async (chatId: string): Promise<any[]> => {
 export const getHistoricalData = async (chatId: string): Promise<any[]> => {
   const result = await dynamoQuery({
     TableName: 'chat-statistics',
-    ExpressionAttributeValues: { ':chatId': chatId },
+    ExpressionAttributeValues: { ':chatId': String(Number(chatId)) },
     KeyConditionExpression: 'chatId = :chatId',
   })
 
-  return result?.[0]?.users ?? []
+  return result?.Items?.[0]?.users ?? []
 }

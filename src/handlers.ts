@@ -29,13 +29,14 @@ export const stats = async (event: any): Promise<any> => {
   const { connectionId, domainName, stage } = event.requestContext
   const { chatId } = JSON.parse(event.body)
 
-  const [usersData, chatInfo] = await Promise.all([
+  const [usersData, historicalData, chatInfo] = await Promise.all([
     get24hChatStats(chatId),
+    getHistoricalData(chatId),
     getChat(chatId),
     saveConnection({ connectionId, chatId: String(Number(chatId)) }),
   ])
 
-  await sendEvent(connectionId, `${domainName}/${stage}`, { usersData, chatInfo })
+  await sendEvent(connectionId, `${domainName}/${stage}`, { usersData, historicalData, chatInfo })
 
   return { statusCode: 200 }
 }
