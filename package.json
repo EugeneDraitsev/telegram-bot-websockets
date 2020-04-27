@@ -17,6 +17,7 @@
     "logs:disconnect": "sls logs -t -f disconnect",
     "logs:stats": "sls logs -t -f stats",
     "logs:broadcastStats": "sls logs -t -f broadcastStats",
+    "logs:updateChatData": "sls logs -t -f updateChatData",
     "deploy": "sls deploy"
   },
   "dependencies": {

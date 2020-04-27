@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path')
 const slsw = require('serverless-webpack')
 
@@ -11,6 +12,7 @@ module.exports = {
     path: path.join(__dirname, '.webpack'),
     filename: '[name].js',
   },
+  externals: [{ 'aws-sdk': 'commonjs aws-sdk' }],
   module: {
     rules: [
       {

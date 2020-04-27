@@ -1,13 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { map, isEmpty, get, isEqual, toLower } from 'lodash'
-import { Bucket } from 'aws-sdk/clients/s3'
+import { map, isEmpty, get, toLower } from 'lodash'
 
 import { saveConnection, removeConnection, getConnections, get24hChatStats, getChat } from './data'
-import { dynamoScan, getFile, saveFile, sendEvent } from './utils'
+import { dynamoScan, sendEvent } from './utils'
+import { updateDynamoChatInfo, updateS3ChatInfo } from './data/chat-info'
 import './dynamo-optimization'
-import { updateChatInfo } from './data/chat-info'
 
-const CHAT_DATA_BUCKET_NAME = process.env.CHAT_DATA_BUCKET_NAME as Bucket
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -64,22 +62,16 @@ export const broadcastStats = async (event: any): Promise<any> => {
 }
 
 export const updateChatData = async (event: any): Promise<any> => {
-  const chatId = get(event.queryStringParameters, 'chatId') || event.chatId
+  const chatId = String(get(event.queryStringParameters, 'chatId', event.chatId))
 
   try {
-    const [chatInfo, savedDataBuffer] = await Promise.all([
-      await getChat(chatId),
-      await getFile(CHAT_DATA_BUCKET_NAME, String(chatId)).catch(() => null),
+    const chatInfo = await getChat(chatId)
+
+    await Promise.all([
+      await updateS3ChatInfo(chatId, chatInfo),
+      await updateDynamoChatInfo(chatId, chatInfo),
     ])
 
-    const savedData = JSON.parse(savedDataBuffer?.Body?.toString() || '{}')
-
-    if (!isEqual(savedData, chatInfo) && chatInfo) {
-      await Promise.all([
-        saveFile(CHAT_DATA_BUCKET_NAME, chatId, Buffer.from(JSON.stringify(chatInfo))),
-        updateChatInfo(chatId, chatInfo),
-      ])
-    }
     return { statusCode: 200 }
   } catch (e) {
     return { statusCode: 200 }

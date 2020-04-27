@@ -13,13 +13,13 @@
     - dynamodb:DeleteItem
   Resource:
     - arn:aws:dynamodb:*:*:table/chat-websocket-connections
+    - arn:aws:dynamodb:*:*:table/chat-statistics
 - Effect: Allow
   Action:
     - dynamodb:Query
     - dynamodb:Scan
     - dynamodb:GetItem
   Resource:
-    - arn:aws:dynamodb:*:*:table/chat-statistics
     - arn:aws:dynamodb:*:*:table/chat-events
 - Effect: Allow
   Action:
