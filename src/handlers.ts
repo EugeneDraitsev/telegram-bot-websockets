@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { map, isEmpty, get, toLower } from 'lodash'
 
-import { saveConnection, removeConnection, getConnections, get24hChatStats, getChat } from './data'
+import { saveConnection, removeConnection, getConnections, get24hChatStats, getChat, getHistoricalData } from './data'
 import { dynamoScan, sendEvent } from './utils'
 import { updateDynamoChatInfo, updateS3ChatInfo } from './data/chat-info'
 import './dynamo-optimization'
@@ -48,10 +48,13 @@ export const broadcastStats = async (event: any): Promise<any> => {
     const connections = await getConnections(chatId)
 
     if (!isEmpty(connections)) {
-      const usersData = await get24hChatStats(chatId)
+      const [usersData, historicalData] = await Promise.all([
+        await get24hChatStats(chatId).catch(() => []),
+        await getHistoricalData(chatId).catch(() => []),
+      ])
 
       await Promise.all(map(connections, (connection) =>
-        sendEvent(connection.connectionId, endpoint, { usersData })))
+        sendEvent(connection.connectionId, endpoint, { usersData, historicalData })))
 
       return { statusCode: 200 }
       // return { statusCode: 200, body: JSON.stringify(data) }

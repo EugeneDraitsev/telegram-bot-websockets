@@ -29,6 +29,7 @@
   },
   "devDependencies": {
     "@babel/core": "7.9.0",
+    "@babel/plugin-proposal-optional-chaining": "^7.9.0",
     "@babel/preset-env": "7.9.5",
     "@babel/preset-typescript": "^7.9.0",
     "@types/form-data": "^2.5.0",

@@ -28,3 +28,14 @@ export const get24hChatStats = async (chatId: string): Promise<any[]> => {
     .orderBy('messages', 'desc')
     .value()
 }
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const getHistoricalData = async (chatId: string): Promise<any[]> => {
+  const result = await dynamoQuery({
+    TableName: 'chat-statistics',
+    ExpressionAttributeValues: { ':chatId': chatId },
+    KeyConditionExpression: 'chatId = :chatId',
+  })
+
+  return result?.[0]?.users ?? []
+}
