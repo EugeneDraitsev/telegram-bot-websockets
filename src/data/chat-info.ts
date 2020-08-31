@@ -23,7 +23,6 @@ const getChatStatistic = async (chatId: string): Promise<ChatStat> => {
   return first(result.Items) as ChatStat
 }
 
-
 export const updateDynamoChatInfo = async (chatId: string, chatInfo: Chat): Promise<void> => {
   const chatStatistics = await getChatStatistic(chatId)
   const chatName = chatInfo?.title || getUserName(chatInfo)

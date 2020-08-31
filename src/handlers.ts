@@ -6,7 +6,6 @@ import { dynamoScan, sendEvent } from './utils'
 import { updateDynamoChatInfo, updateS3ChatInfo } from './data/chat-info'
 import './dynamo-optimization'
 
-
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Credentials': true,

@@ -1,13 +1,11 @@
 import { DynamoDB } from 'aws-sdk'
 import { DocumentClient } from 'aws-sdk/lib/dynamodb/document_client'
 
-
 const documentClient = new DynamoDB.DocumentClient({
   apiVersion: '2012-08-10',
   region: process.env.region || 'eu-central-1',
   service: new DynamoDB({ apiVersion: '2012-08-10', region: process.env.region || 'eu-central-1' }),
 })
-
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const dynamoScan = async (inputParams: DocumentClient.ScanInput): Promise<any[]> => {

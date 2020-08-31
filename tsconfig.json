@@ -8,6 +8,7 @@
       "dom"
     ],
     "moduleResolution": "node",
+    "skipLibCheck": true,
     "rootDir": "./",
     "outDir": "./dist",
     "sourceMap": true,
@@ -19,7 +20,6 @@
     "noImplicitReturns": true,
     "preserveConstEnums": true,
     "suppressImplicitAnyIndexErrors": true,
-    "forceConsistentCasingInFileNames": true
   },
   "exclude": [
     "node_modules",

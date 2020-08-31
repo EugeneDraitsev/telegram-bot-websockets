@@ -14,7 +14,7 @@ export interface Chat {
   photo?: ChatPhoto;
   description?: string;
   invite_link?: string;
-  pinned_message?: object;
+  pinned_message?: any;
   sticker_set_name?: string;
   can_set_sticker_set?: boolean;
 }
