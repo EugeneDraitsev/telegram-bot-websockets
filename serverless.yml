@@ -7,8 +7,6 @@ provider:
   memorySize: 512
   timeout: 30
   runtime: nodejs14.x
-  tracing:
-    lambda: true
   environment:
     IS_LOCAL: ${env:IS_LOCAL}
     IMAGES_BUCKET_NAME: ${self:custom.imagesBucketName}
