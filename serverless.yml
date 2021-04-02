@@ -13,8 +13,10 @@ provider:
     CHAT_DATA_BUCKET_NAME: ${self:custom.chatDataBucketName}
     BOT_TOKEN: ${env:BOT_TOKEN, file(./config.json):BOT_TOKEN}
     region: ${self:provider.region}
-  iamRoleStatements:
-    ${file(roleStatements.yml)}
+  iam:
+    role:
+      statements:
+        ${file(roleStatements.yml)}
 
 functions:
   connect:
