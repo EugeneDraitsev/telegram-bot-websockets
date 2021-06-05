@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-const path = require('path')
+/* eslint-disable @typescript-eslint/no-var-requires,import/no-extraneous-dependencies */
 const slsw = require('serverless-webpack')
 
 module.exports = {
@@ -7,11 +6,6 @@ module.exports = {
   mode: slsw.lib.webpack.IS_LOCAL ? 'development' : 'production',
   target: 'node',
   devtool: 'source-map',
-  output: {
-    libraryTarget: 'commonjs',
-    path: path.join(__dirname, '.webpack'),
-    filename: '[name].js',
-  },
   externals: [{ 'aws-sdk': 'commonjs aws-sdk' }],
   module: {
     rules: [
@@ -20,22 +14,6 @@ module.exports = {
         use: [
           {
             loader: 'babel-loader',
-          },
-        ],
-      },
-      {
-        type: 'javascript/auto',
-        test: /\.mjs$/,
-        use: [],
-      },
-      {
-        test: /\.(mp4)$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              name: '[path][name].[ext]',
-            },
           },
         ],
       },

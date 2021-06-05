@@ -17,7 +17,7 @@ export const get24hChatStats = async (chatId: string): Promise<any[]> => {
     ExpressionAttributeNames: { '#date': 'date' },
   })
 
-  const data = Items as ChatEvent []
+  const data = Items as ChatEvent[]
 
   const groupedMessages = groupBy(data, (x) => x.userInfo.id)
 

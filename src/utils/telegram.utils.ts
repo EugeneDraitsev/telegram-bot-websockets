@@ -6,16 +6,16 @@ import { last, split } from 'lodash'
 import { isFileExist, saveFile } from '.'
 
 interface Response {
-  ok: boolean;
+  ok: boolean
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  result: any;
+  result: any
 }
 
 export interface UserInfo {
-  username?: string;
-  first_name?: string;
-  last_name?: string;
-  id: number;
+  username?: string
+  first_name?: string
+  last_name?: string
+  id: number
 }
 
 const BUCKET_NAME = process.env.IMAGES_BUCKET_NAME as Bucket
@@ -23,9 +23,14 @@ const BASE_URL = `https://api.telegram.org/bot${process.env.BOT_TOKEN}`
 const FILE_URL = `https://api.telegram.org/file/bot${process.env.BOT_TOKEN}`
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const botRequest = async (method: string, body: FormData): Promise<any> => {
+export const botRequest = async (
+  method: string,
+  body: FormData,
+): Promise<any> => {
   const url = `${BASE_URL}/${method}`
-  const response: Response = await fetch(url, { body, method: 'POST' }).then((r) => r.json())
+  const response: Response = await fetch(url, { body, method: 'POST' }).then(
+    (r) => r.json(),
+  )
   if (response.ok) {
     return response.result
   }
@@ -54,4 +59,7 @@ export const getFileUrl = async (filePath: string): Promise<string> => {
 }
 
 export const getUserName = (userInfo?: UserInfo): string =>
-  userInfo?.username || userInfo?.first_name || userInfo?.last_name || String(userInfo?.id || '')
+  userInfo?.username ||
+  userInfo?.first_name ||
+  userInfo?.last_name ||
+  String(userInfo?.id || '')

@@ -1,7 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { map, isEmpty, get, toLower } from 'lodash'
 
-import { saveConnection, removeConnection, getConnections, get24hChatStats, getChat, getHistoricalData } from './data'
+import {
+  saveConnection,
+  removeConnection,
+  getConnections,
+  get24hChatStats,
+  getChat,
+  getHistoricalData,
+} from './data'
 import { dynamoScan, sendEvent } from './utils'
 import { updateDynamoChatInfo, updateS3ChatInfo } from './data/chat-info'
 import './dynamo-optimization'
@@ -35,14 +42,19 @@ export const stats = async (event: any): Promise<any> => {
     saveConnection({ connectionId, chatId: String(Number(chatId)) }),
   ])
 
-  await sendEvent(connectionId, `${domainName}/${stage}`, { usersData, historicalData, chatInfo })
+  await sendEvent(connectionId, `${domainName}/${stage}`, {
+    usersData,
+    historicalData,
+    chatInfo,
+  })
 
   return { statusCode: 200 }
 }
 
 export const broadcastStats = async (event: any): Promise<any> => {
   const chatId = get(event.queryStringParameters, 'chatId') || event.chatId
-  const endpoint = get(event.queryStringParameters, 'endpoint') || event.endpoint
+  const endpoint =
+    get(event.queryStringParameters, 'endpoint') || event.endpoint
 
   if (chatId && endpoint) {
     const connections = await getConnections(chatId)
@@ -53,8 +65,14 @@ export const broadcastStats = async (event: any): Promise<any> => {
         await getHistoricalData(chatId).catch(() => []),
       ])
 
-      await Promise.all(map(connections, (connection) =>
-        sendEvent(connection.connectionId, endpoint, { usersData, historicalData })))
+      await Promise.all(
+        map(connections, (connection) =>
+          sendEvent(connection.connectionId, endpoint, {
+            usersData,
+            historicalData,
+          }),
+        ),
+      )
 
       return { statusCode: 200 }
       // return { statusCode: 200, body: JSON.stringify(data) }
@@ -65,7 +83,9 @@ export const broadcastStats = async (event: any): Promise<any> => {
 }
 
 export const updateChatData = async (event: any): Promise<any> => {
-  const chatId = String(get(event.queryStringParameters, 'chatId', event.chatId))
+  const chatId = String(
+    get(event.queryStringParameters, 'chatId', event.chatId),
+  )
 
   try {
     const chatInfo = await getChat(chatId)
@@ -100,7 +120,11 @@ export const getChatByName = async (event: any): Promise<any> => {
 
     const escapedChats = chats.map((chat) => chat.chatInfo)
 
-    return { statusCode: 200, headers: corsHeaders, body: JSON.stringify(escapedChats) }
+    return {
+      statusCode: 200,
+      headers: corsHeaders,
+      body: JSON.stringify(escapedChats),
+    }
   } catch (e) {
     return { statusCode: 502 }
   }

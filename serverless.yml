@@ -64,7 +64,10 @@ custom:
   serverless-offline:
     port: 4000
   webpack:
+    forceExclude:
+      - aws-sdk
     packager: 'yarn'
+
 
 plugins:
   - serverless-webpack
