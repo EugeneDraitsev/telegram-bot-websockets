@@ -1,4 +1,4 @@
-import * as FormData from 'form-data'
+import FormData from 'form-data'
 
 import { botRequest, getFileUrl } from '../utils'
 import { Chat, File } from '../types'

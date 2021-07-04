@@ -61,16 +61,14 @@ functions:
 custom:
   imagesBucketName: chat-profile-images
   chatDataBucketName: chat-profile-data
-  serverless-offline:
-    port: 4000
-  webpack:
-    forceExclude:
+  esbuild:
+    packager: yarn
+    minify: true
+    exclude:
       - aws-sdk
-    packager: 'yarn'
-
 
 plugins:
-  - serverless-webpack
+  - serverless-esbuild
   - serverless-offline
 
 resources:
