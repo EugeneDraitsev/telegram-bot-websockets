@@ -1,17 +1,13 @@
 {
-  "extends": ["plugin:@typescript-eslint/recommended", "airbnb-base", "prettier"],
+  "extends": ["plugin:@typescript-eslint/recommended", "airbnb-base", "plugin:sonarjs/recommended", "prettier"],
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint", "jest"],
-  "env": {
-    "browser": true,
-    "jest/globals": true
-  },
+  "plugins": ["@typescript-eslint", "sonarjs", "jest"],
   "settings": {
     "import/resolver": {"node": {"extensions": [".js", ".jsx", ".ts", ".tsx", ".json"]}}
   },
   "rules": {
     "import/extensions": ["error", "ignorePackages", {"js": "never", "jsx": "never", "ts": "never", "tsx": "never"}],
-    "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
+    "import/no-extraneous-dependencies": ["error", {"devDependencies": true}],
     "import/prefer-default-export": "off",
     "camelcase": "off"
   }
