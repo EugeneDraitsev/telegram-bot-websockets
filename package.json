@@ -25,7 +25,7 @@
     "aws-sdk": "^2.1008.0",
     "form-data": "^4.0.0",
     "lodash": "^4.17.21",
-    "node-fetch": "^2.6.5"
+    "node-fetch": "^3.1.1"
   },
   "devDependencies": {
     "@babel/core": "^7.15.8",
