@@ -22,15 +22,15 @@ const BUCKET_NAME = process.env.IMAGES_BUCKET_NAME as Bucket
 const BASE_URL = `https://api.telegram.org/bot${process.env.BOT_TOKEN}`
 const FILE_URL = `https://api.telegram.org/file/bot${process.env.BOT_TOKEN}`
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const botRequest = async (
   method: string,
   body: FormData,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<any> => {
   const url = `${BASE_URL}/${method}`
-  const response: Response = await fetch(url, { body, method: 'POST' }).then(
-    (r) => r.json(),
-  )
+  const response = (await fetch(url, { body, method: 'POST' }).then((r) =>
+    r.json(),
+  )) as Response
   if (response.ok) {
     return response.result
   }

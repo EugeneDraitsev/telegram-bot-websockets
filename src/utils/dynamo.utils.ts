@@ -10,9 +10,9 @@ const documentClient = new DynamoDB.DocumentClient({
   }),
 })
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const dynamoScan = async (
   inputParams: DocumentClient.ScanInput,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<any[]> => {
   const results = []
   const params = { ...inputParams }
