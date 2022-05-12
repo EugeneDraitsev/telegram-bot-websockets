@@ -62,15 +62,19 @@ functions:
 custom:
   imagesBucketName: chat-profile-images
   chatDataBucketName: chat-profile-data
+  serverless-offline:
+    httpPort: 4000
   esbuild:
     packager: yarn
     minify: true
+    nativeZip: true
+    target: 'node14'
     exclude:
       - aws-sdk
 
 plugins:
-  - serverless-esbuild
   - serverless-offline
+  - serverless-esbuild
 
 resources:
   ${file(resources.yml)}
