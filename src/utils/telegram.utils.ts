@@ -1,4 +1,3 @@
-import * as FormData from 'form-data'
 import fetch from 'node-fetch'
 import { Bucket } from 'aws-sdk/clients/s3'
 import { last, split } from 'lodash'
@@ -18,19 +17,31 @@ export interface UserInfo {
   id: number
 }
 
+type JSONValue =
+  | string
+  | number
+  | boolean
+  | { [x: string]: JSONValue }
+  | Array<JSONValue>
+
 const BUCKET_NAME = process.env.IMAGES_BUCKET_NAME as Bucket
 const BASE_URL = `https://api.telegram.org/bot${process.env.BOT_TOKEN}`
 const FILE_URL = `https://api.telegram.org/file/bot${process.env.BOT_TOKEN}`
 
 export const botRequest = async (
   method: string,
-  body: FormData,
+  body: JSONValue,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<any> => {
   const url = `${BASE_URL}/${method}`
-  const response = (await fetch(url, { body, method: 'POST' }).then((r) =>
-    r.json(),
-  )) as Response
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  }).then((r) => r.json() as Promise<Response>)
+
   if (response.ok) {
     return response.result
   }

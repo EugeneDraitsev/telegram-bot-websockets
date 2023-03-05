@@ -33,3 +33,4 @@ config.json
 config.ts
 .vscode
 package-lock.json
+.env
