@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "repository": {
     "type": "git",
-    "url": "https://bitbucket.org/drai/telegram-bot-websockets"
+    "url": "https://github.com/EugeneDraitsev/telegram-bot-websockets"
   },
   "author": "Eugene Draitsev <ddrrai@gmail.com>",
   "license": "MIT",
@@ -22,7 +22,7 @@
     "deploy": "sls deploy"
   },
   "dependencies": {
-    "aws-sdk": "^2.1328.0",
+    "aws-sdk": "^2.1330.0",
     "lodash": "^4.17.21",
     "node-fetch": "^3.3.0"
   },
@@ -30,13 +30,13 @@
     "@types/lodash": "^4.14.191",
     "@types/node": "^18.14.6",
     "@types/node-fetch": "^2.6.2",
-    "@typescript-eslint/eslint-plugin": "^5.54.0",
-    "@typescript-eslint/parser": "^5.54.0",
+    "@typescript-eslint/eslint-plugin": "^5.54.1",
+    "@typescript-eslint/parser": "^5.54.1",
     "esbuild": "^0.17.11",
     "esbuild-jest": "^0.5.0",
     "eslint": "^8.35.0",
     "eslint-config-airbnb": "^19.0.4",
-    "eslint-config-prettier": "^8.6.0",
+    "eslint-config-prettier": "^8.7.0",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-jest": "^27.2.1",
     "eslint-plugin-sonarjs": "^0.18.0",

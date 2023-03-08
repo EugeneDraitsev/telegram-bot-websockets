@@ -10,10 +10,7 @@ const documentClient = new DynamoDB.DocumentClient({
   }),
 })
 
-export const dynamoScan = async (
-  inputParams: DocumentClient.ScanInput,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-): Promise<any[]> => {
+export const dynamoScan = async (inputParams: DocumentClient.ScanInput) => {
   const results = []
   const params = { ...inputParams }
 
@@ -32,15 +29,11 @@ export const dynamoScan = async (
   }
 }
 
-export const dynamoQuery = (
-  params: DocumentClient.QueryInput,
-): Promise<DocumentClient.QueryOutput> => documentClient.query(params).promise()
+export const dynamoQuery = (params: DocumentClient.QueryInput) =>
+  documentClient.query(params).promise()
 
-export const dynamoPutItem = (
-  params: DocumentClient.PutItemInput,
-): Promise<DocumentClient.PutItemOutput> => documentClient.put(params).promise()
+export const dynamoPutItem = (params: DocumentClient.PutItemInput) =>
+  documentClient.put(params).promise()
 
-export const dynamoDeleteItem = (
-  params: DocumentClient.DeleteItemInput,
-): Promise<DocumentClient.DeleteItemOutput> =>
+export const dynamoDeleteItem = (params: DocumentClient.DeleteItemInput) =>
   documentClient.delete(params).promise()

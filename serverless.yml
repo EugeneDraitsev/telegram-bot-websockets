@@ -1,5 +1,4 @@
 service: telegram-websockets
-useDotenv: true
 
 provider:
   name: aws
@@ -9,11 +8,9 @@ provider:
   timeout: 30
   runtime: nodejs16.x
   architecture: arm64
-  lambdaHashingVersion: 20201221
   environment:
     IMAGES_BUCKET_NAME: ${self:custom.imagesBucketName}
     CHAT_DATA_BUCKET_NAME: ${self:custom.chatDataBucketName}
-    BOT_TOKEN: ${env:BOT_TOKEN}
     region: ${self:provider.region}
   iam:
     role:
@@ -39,9 +36,6 @@ functions:
 
   broadcastStats:
     handler: src/handlers.broadcastStats
-
-  updateChatData:
-    handler: src/handlers.updateChatData
 
   getChatByName:
     handler: src/handlers.getChatByName

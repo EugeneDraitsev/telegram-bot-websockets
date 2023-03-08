@@ -4,7 +4,7 @@ export const sendEvent = async (
   connectionId: string,
   endpoint: string,
   data?: any,
-): Promise<any> => {
+) => {
   const client = new ApiGatewayManagementApi({
     apiVersion: '2018-11-29',
     endpoint: `https://${endpoint}`,

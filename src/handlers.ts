@@ -6,11 +6,9 @@ import {
   removeConnection,
   getConnections,
   get24hChatStats,
-  getChat,
   getHistoricalData,
 } from './data'
 import { dynamoScan, sendEvent } from './utils'
-import { updateDynamoChatInfo, updateS3ChatInfo } from './data/chat-info'
 import './dynamo-optimization'
 
 const corsHeaders = {
@@ -35,17 +33,15 @@ export const stats = async (event: any): Promise<any> => {
   const { connectionId, domainName, stage } = event.requestContext
   const { chatId } = JSON.parse(event.body)
 
-  const [usersData, historicalData, chatInfo] = await Promise.all([
+  const [usersData, historicalData] = await Promise.all([
     get24hChatStats(chatId),
     getHistoricalData(chatId),
-    getChat(chatId),
     saveConnection({ connectionId, chatId: String(Number(chatId)) }),
   ])
 
   await sendEvent(connectionId, `${domainName}/${stage}`, {
     usersData,
     historicalData,
-    chatInfo,
   })
 
   return { statusCode: 200 }
@@ -81,26 +77,6 @@ export const broadcastStats = async (event: any): Promise<any> => {
 
   return { statusCode: 200 }
 }
-
-export const updateChatData = async (event: any): Promise<any> => {
-  const chatId = String(
-    get(event.queryStringParameters, 'chatId', event.chatId),
-  )
-
-  try {
-    const chatInfo = await getChat(chatId)
-
-    await Promise.all([
-      await updateS3ChatInfo(chatId, chatInfo),
-      await updateDynamoChatInfo(chatId, chatInfo),
-    ])
-
-    return { statusCode: 200 }
-  } catch (e) {
-    return { statusCode: 200 }
-  }
-}
-
 export const getChatByName = async (event: any): Promise<any> => {
   try {
     const name = get(event.queryStringParameters, 'name') || event.name

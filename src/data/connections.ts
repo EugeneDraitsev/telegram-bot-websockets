@@ -21,7 +21,7 @@ export const removeConnection = (
     Key: { connectionId },
   })
 
-export const getConnections = async (chatId: string): Promise<Connection[]> => {
+export const getConnections = async (chatId: string) => {
   const result = await dynamoScan({
     TableName: WEBSOCKET_NAME,
     FilterExpression: 'chatId = :chatId',

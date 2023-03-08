@@ -5,8 +5,7 @@ import { ChatEvent } from '../types'
 
 const DAY = 1000 * 60 * 60 * 24
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const get24hChatStats = async (chatId: string): Promise<any[]> => {
+export const get24hChatStats = async (chatId: string) => {
   const { Items } = await dynamoQuery({
     TableName: 'chat-events',
     KeyConditionExpression: 'chatId = :chatId AND #date > :date',
@@ -29,8 +28,7 @@ export const get24hChatStats = async (chatId: string): Promise<any[]> => {
     .value()
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const getHistoricalData = async (chatId: string): Promise<any[]> => {
+export const getHistoricalData = async (chatId: string) => {
   const result = await dynamoQuery({
     TableName: 'chat-statistics',
     ExpressionAttributeValues: { ':chatId': String(Number(chatId)) },
