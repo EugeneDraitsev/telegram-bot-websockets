@@ -1,25 +1,39 @@
-import { DynamoDB } from 'aws-sdk'
-import { DocumentClient } from 'aws-sdk/lib/dynamodb/document_client'
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
+import {
+  DeleteCommand,
+  DynamoDBDocumentClient,
+  PutCommand,
+  QueryCommand,
+  ScanCommand,
+} from '@aws-sdk/lib-dynamodb'
+import type {
+  DeleteCommandInput,
+  DeleteCommandOutput,
+  PutCommandInput,
+  PutCommandOutput,
+  QueryCommandInput,
+  QueryCommandOutput,
+  ScanCommandInput,
+} from '@aws-sdk/lib-dynamodb'
 
-const documentClient = new DynamoDB.DocumentClient({
-  apiVersion: '2012-08-10',
-  region: process.env.region || 'eu-central-1',
-  service: new DynamoDB({
-    apiVersion: '2012-08-10',
-    region: process.env.region || 'eu-central-1',
-  }),
+const region = process.env.region || process.env.AWS_REGION || 'eu-central-1'
+const client = new DynamoDBClient({ region })
+const documentClient = DynamoDBDocumentClient.from(client, {
+  marshallOptions: {
+    removeUndefinedValues: true,
+  },
 })
 
-export const dynamoScan = async (inputParams: DocumentClient.ScanInput) => {
-  const results = []
+export const dynamoScan = async <T = Record<string, unknown>>(
+  inputParams: ScanCommandInput,
+): Promise<T[]> => {
+  const results: T[] = []
   const params = { ...inputParams }
 
-  // eslint-disable-next-line no-constant-condition
   while (true) {
-    // eslint-disable-next-line no-await-in-loop
-    const scanResults = await documentClient.scan(params).promise()
+    const scanResults = await documentClient.send(new ScanCommand(params))
 
-    results.push(...(scanResults.Items || []))
+    results.push(...((scanResults.Items as T[]) || []))
 
     if (typeof scanResults.LastEvaluatedKey === 'undefined') {
       return results
@@ -29,11 +43,15 @@ export const dynamoScan = async (inputParams: DocumentClient.ScanInput) => {
   }
 }
 
-export const dynamoQuery = (params: DocumentClient.QueryInput) =>
-  documentClient.query(params).promise()
+export const dynamoQuery = (
+  params: QueryCommandInput,
+): Promise<QueryCommandOutput> => documentClient.send(new QueryCommand(params))
 
-export const dynamoPutItem = (params: DocumentClient.PutItemInput) =>
-  documentClient.put(params).promise()
+export const dynamoPutItem = (
+  params: PutCommandInput,
+): Promise<PutCommandOutput> => documentClient.send(new PutCommand(params))
 
-export const dynamoDeleteItem = (params: DocumentClient.DeleteItemInput) =>
-  documentClient.delete(params).promise()
+export const dynamoDeleteItem = (
+  params: DeleteCommandInput,
+): Promise<DeleteCommandOutput> =>
+  documentClient.send(new DeleteCommand(params))

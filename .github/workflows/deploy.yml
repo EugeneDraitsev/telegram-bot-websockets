@@ -1,20 +1,24 @@
-name: Deploy Latest Master
+name: Deploy Latest Main
 
 on:
+  workflow_dispatch:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - run: yarn
-      - run: yarn lint
-      - run: yarn tsc
-      - run: yarn deploy
+      - uses: actions/checkout@v6
+      - uses: oven-sh/setup-bun@v2
+
+      - run: bun install
+      - run: bun biome
+      - run: bun tsc
+      - run: bun run test
+      - run: bun run deploy
         env:
           AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
           AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
-          BOT_TOKEN: ${{secrets.BOT_TOKEN}}
+          SERVERLESS_ACCESS_KEY: ${{secrets.SERVERLESS_ACCESS_KEY}}

@@ -1,2 +1,2 @@
-export * from './statistics.types'
 export * from './connections.types'
+export * from './statistics.types'

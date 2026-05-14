@@ -27,6 +27,8 @@ node_modules
 .serverless
 .webpack
 yarn-error.log
+.yarn
+.yarnrc
 
 config.*
 config.json

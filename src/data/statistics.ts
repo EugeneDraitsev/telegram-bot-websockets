@@ -1,7 +1,5 @@
-import { chain, groupBy } from 'lodash'
-
+import type { ChatEvent, UserInfo } from '../types'
 import { dynamoQuery } from '../utils'
-import { ChatEvent } from '../types'
 
 const DAY = 1000 * 60 * 60 * 24
 
@@ -16,16 +14,25 @@ export const get24hChatStats = async (chatId: string) => {
     ExpressionAttributeNames: { '#date': 'date' },
   })
 
-  const data = Items as ChatEvent[]
+  const data = (Items ?? []) as ChatEvent[]
+  const messageCountByUserId = data.reduce<Record<number, number>>(
+    (acc, event) => {
+      acc[event.userInfo.id] = (acc[event.userInfo.id] ?? 0) + 1
+      return acc
+    },
+    {},
+  )
+  const usersById = data.reduce<Map<number, UserInfo>>((acc, event) => {
+    if (!acc.has(event.userInfo.id)) {
+      acc.set(event.userInfo.id, event.userInfo)
+    }
 
-  const groupedMessages = groupBy(data, (x) => x.userInfo.id)
+    return acc
+  }, new Map())
 
-  return chain(data)
-    .map((x) => x.userInfo)
-    .uniqBy('id')
-    .map((x) => ({ ...x, messages: groupedMessages[x.id].length }))
-    .orderBy('messages', 'desc')
-    .value()
+  return Array.from(usersById.values())
+    .map((user) => ({ ...user, messages: messageCountByUserId[user.id] ?? 0 }))
+    .sort((a, b) => b.messages - a.messages)
 }
 
 export const getHistoricalData = async (chatId: string) => {
